@@ -7,6 +7,7 @@ This is a collection of adapter to be used in Go project. Interface included, so
 - Kafka [(github.com/segmentio/kafka-go")](github.com/segmentio/kafka-go")
 - Logger [(go.uber.org/zap)](go.uber.org/zap)
 - Redis [(github.com/go-redis/redis)](github.com/go-redis/redis)
+- GraphQL Client [(github.com/hasura/go-graphql-client)](github.com/hasura/go-graphql-client)
 
 Common library
 - Configuration: [github.com/spf13/viper](github.com/spf13/viper)
