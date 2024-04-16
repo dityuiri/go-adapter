@@ -12,7 +12,6 @@ import (
 
 /*
 Client implements IClient
-stolen from https://github.com/gojek/heimdall
 */
 type Client struct {
 	Context context.Context
