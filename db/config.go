@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"github.com/spf13/viper"
 )
 
@@ -65,5 +66,41 @@ func NewConfig() *Configuration {
 		ConnMaxIdleTime: viper.GetInt("DB_CONN_MAX_IDLE_TIME"),
 
 		Echo: viper.GetBool("DB_ECHO"),
+	}
+}
+
+// NewConfigWithPrefix returns an instance to the configuration based on certain prefix
+func NewConfigWithPrefix(prefix string) *Configuration {
+	// https://www.alexedwards.net/blog/configuring-sqldb
+	viper.SetDefault(fmt.Sprintf("%s_%s", prefix, "DB_MAX_OPEN_CONNS"), 25)
+	viper.SetDefault(fmt.Sprintf("%s_%s", prefix, "DB_MAX_IDLE_CONNS"), 25)
+	viper.SetDefault(fmt.Sprintf("%s_%s", prefix, "DB_CONN_MAX_LIFETIME"), 5*60)  // 5 minutes
+	viper.SetDefault(fmt.Sprintf("%s_%s", prefix, "DB_CONN_MAX_IDLE_TIME"), 1*60) // 1 minute
+
+	viper.SetDefault(fmt.Sprintf("%s_%s", prefix, "DB_ECHO"), false)
+
+	return &Configuration{
+		Host: viper.GetString(fmt.Sprintf("%s_%s", prefix, "DB_HOST")),
+		Port: viper.GetInt(fmt.Sprintf("%s_%s", prefix, "DB_PORT")),
+
+		User:     viper.GetString(fmt.Sprintf("%s_%s", prefix, "DB_USER")),
+		Password: viper.GetString(fmt.Sprintf("%s_%s", prefix, "DB_PASSWORD")),
+
+		Name:    viper.GetString(fmt.Sprintf("%s_%s", prefix, "DB_NAME")),
+		Schema:  viper.GetString(fmt.Sprintf("%s_%s", prefix, "DB_SCHEMA")),
+		Driver:  viper.GetString(fmt.Sprintf("%s_%s", prefix, "DB_DRIVER")),
+		SSLMode: viper.GetString(fmt.Sprintf("%s_%s", prefix, "DB_SSL_MODE")),
+
+		Migration: &MigrationConfiguration{
+			User:     viper.GetString(fmt.Sprintf("%s_%s", prefix, "DB_MIGRATION_USER")),
+			Password: viper.GetString(fmt.Sprintf("%s_%s", prefix, "DB_MIGRATION_PASSWORD")),
+		},
+
+		MaxOpenConns:    viper.GetInt(fmt.Sprintf("%s_%s", prefix, "DB_MAX_OPEN_CONNS")),
+		MaxIdleConns:    viper.GetInt(fmt.Sprintf("%s_%s", prefix, "DB_MAX_IDLE_CONNS")),
+		ConnMaxLifetime: viper.GetInt(fmt.Sprintf("%s_%s", prefix, "DB_CONN_MAX_LIFETIME")),
+		ConnMaxIdleTime: viper.GetInt(fmt.Sprintf("%s_%s", prefix, "DB_CONN_MAX_IDLE_TIME")),
+
+		Echo: viper.GetBool(fmt.Sprintf("%s_%s", prefix, "DB_ECHO")),
 	}
 }
